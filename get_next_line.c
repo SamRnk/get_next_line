@@ -13,28 +13,28 @@
 #include	"get_next_line.h"
 #include	<stdio.h>
 
+char	*read_and_make_line(int fd, char *read_buffer)
+{
+	ssize_t	n_chars;
+
+
+
 char	*get_next_line(int fd)
 {
-	char			*line_return;
-	char			*str_buffer;
-	static size_t	i;
+	static char	*read_buffer;
+	char		*line_return;
 
-	str_buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!str_buff)
+	read_buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!read_buffer)
 		return (NULL);
-	str_buff[BUFFER_SIZE] = '\0';
-	read(fd, str_buff, BUFFER_SIZE);
-	i = ft_strchr(str_buff, '\n');
-	if (i != 0)
-	return (line_return);
+	read_buffer[BUFFER_SIZE] = '\0';
+	line_return = read_and_make_line(fd, read_buffer);
 }
 
 int	main(void)
 {
 	int	fd;
-	int	i;
 	
-	i = 0;
 	fd = open("test.txt", O_RDONLY);
 	printf("%s\n", get_next_line(fd));
 	close(fd);
