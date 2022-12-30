@@ -6,7 +6,7 @@
 /*   By: sreerink <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/18 02:16:18 by sreerink      #+#    #+#                 */
-/*   Updated: 2022/12/22 22:00:40 by sreerink      ########   odam.nl         */
+/*   Updated: 2022/12/29 20:08:37 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 char	*read_and_make_line(int fd, char *read_buffer)
 {
 	ssize_t	n_chars;
+	while (!ft_strchr(read_buffer, '\n'))
+	{
 
 
 
