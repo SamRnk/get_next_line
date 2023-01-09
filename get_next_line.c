@@ -6,31 +6,32 @@
 /*   By: sreerink <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/18 02:16:18 by sreerink      #+#    #+#                 */
-/*   Updated: 2022/12/29 20:08:37 by sreerink      ########   odam.nl         */
+/*   Updated: 2023/01/09 21:22:43 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"get_next_line.h"
 #include	<stdio.h>
 
-char	*read_and_make_line(int fd, char *read_buffer)
+char	*read_and_make_line(int fd, char *buffer)
 {
-	ssize_t	n_chars;
-	while (!ft_strchr(read_buffer, '\n'))
+	static char	*read_text;
+	char		*line;
+	ssize_t		n_chars;
+	while (!ft_strchr(read_text, '\n'))
 	{
-
 
 
 char	*get_next_line(int fd)
 {
-	static char	*read_buffer;
-	char		*line_return;
+	char	*buffer;
+	char	*line_return;
 
-	read_buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!read_buffer)
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
 		return (NULL);
-	read_buffer[BUFFER_SIZE] = '\0';
-	line_return = read_and_make_line(fd, read_buffer);
+	buffer[BUFFER_SIZE] = '\0';
+	line_return = read_and_make_line(fd, buffer);
 }
 
 int	main(void)
