@@ -48,29 +48,42 @@ char	*stash_until_newline(int fd, char *stash, ssize_t read_chars)
 			return (NULL);
 		}
 		buffer[read_chars] = '\0';
+		printf("%s|", buffer);
 		stash = ft_strjoin(stash, buffer);
 	}
 	free(buffer);
 	return (stash);
 }
 
+char	*make_line(char *line, char *stash)
+{
+	size_t	i;
+
+	i = pos_newline(stash);
+}
+
 char	*get_next_line(int fd)
 {
-	static char	*stash = NULL;
+	static char	*stash;
 	char		*line;
 	ssize_t		read_chars;
 
 	if (fd < 0 || BUFFER_SIZE <= 0  || read(fd, line, 0) < 0)
 		return (NULL);
 	if (stash == NULL)
+	{
+		stash = malloc(sizeof(char) * 1);
 		stash[0] = '\0';
+	}
 	read_chars = 1;
 	stash = stash_until_newline(fd, stash, read_chars);
 	if (stash == NULL)
 		return (NULL);
-	if (read_chars = 0)
+	if (read_chars == 0)
 		line = stash;
 	else
+		line = make_line(line, stash);
+	return (stash);
 }
 
 int	main(void)
