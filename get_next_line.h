@@ -23,4 +23,12 @@
 
 char	*get_next_line(int fd);
 
+int	has_newline(char *str);
+
+size_t	ft_strlen(const char *s);
+
+void	ft_strlcpy(char *dst, const char *src, size_t size);
+
+void	ft_strlcat(char *dst, const char *src, size_t size);
+
 #endif
