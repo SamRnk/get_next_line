@@ -1,5 +1,4 @@
 #include	"get_next_line.h"
-#include	<stdio.h>
 
 int	has_newline(char *str)
 {
@@ -26,7 +25,7 @@ size_t	pos_newline(char *str)
 			return (i);
 		i++;
 	}
-	return (0);
+	return (i);
 }
 
 size_t	ft_strlen(const char *s)
