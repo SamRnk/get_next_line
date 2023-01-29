@@ -11,50 +11,52 @@
 /* ************************************************************************** */
 
 #include	"get_next_line.h"
-#include	<stdio.h>
+//#include	<stdio.h>
 
-char    *ft_strjoin(char *stash, char *buffer)
+char	*ft_strjoin(char *dst, char *src)
 {
-        size_t  s_len;
-        size_t  b_len;
-        char    *new_str;
+	size_t	dst_len;
+	size_t	src_len;
+	char	*new_str;
 
-        s_len = ft_strlen(stash);
-        b_len = ft_strlen(buffer);
-        new_str = malloc(sizeof(char) * s_len + b_len + 1);
-        if (!new_str)
+	if (dst == NULL)
 	{
-		free(stash);
-		free(buffer);
-                return (NULL);
+		dst = malloc(sizeof(char) * 1);
+		dst[0] = '\0';
 	}
-        ft_strlcpy(new_str, stash, s_len + 1);
-        ft_strlcat(new_str, buffer, s_len + b_len + 1);
-	free(stash);
-        return (new_str);
+	dst_len = ft_strlen(dst);
+	src_len = ft_strlen(src);
+	new_str = malloc(sizeof(char) * (dst_len + src_len + 1));
+	if (!new_str)
+	{
+		free_mallocs(dst, src);
+		return (NULL);
+	}
+	ft_strlcpy(new_str, dst, dst_len + 1);
+	ft_strlcpy(new_str + dst_len, src, src_len + 1);
+	free(dst);
+	return (new_str);
 }
 
-char	*stash_until_newline(int fd, char *stash)
+char	*stash_until_newline(int fd, char *stash, ssize_t *read_chars)
 {
 	char	*buffer;
-	ssize_t	read_chars;
-	
-	read_chars = 1;
+
+	*read_chars = 1;
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (free(stash), NULL);
 	buffer[0] = '\0';
-	while (!has_newline(buffer) && read_chars != 0)
+	while (!has_newline(buffer) && *read_chars != 0)
 	{
-		read_chars = read(fd, buffer, BUFFER_SIZE);
-		if (read_chars == -1)
+		*read_chars = read(fd, buffer, BUFFER_SIZE);
+		if (*read_chars == -1)
 		{
-			free(buffer);
-			free(stash);
+			free_mallocs(buffer, stash);
 			return (NULL);
 		}
-		buffer[read_chars] = '\0';
-		printf("%s|", buffer);
+		buffer[*read_chars] = '\0';
+//		printf("%s|", buffer);
 		stash = ft_strjoin(stash, buffer);
 		if (stash == NULL)
 			return (NULL);
@@ -63,71 +65,80 @@ char	*stash_until_newline(int fd, char *stash)
 	return (stash);
 }
 
+char	*make_temp(char *temp, char *stash)
+{
+	size_t	pos;
+
+	pos = pos_newline(stash);
+	temp = NULL;
+	temp = ft_strjoin(temp, stash + pos + 1);
+	if (temp == NULL)
+		return (NULL);
+	return (temp);
+}
+
 char	*make_line(char *line, char *stash)
 {
 	size_t	pos;
-	char	*temp;
 
 	pos = pos_newline(stash);
-	line = malloc(sizeof(char) * 1);
-	if (!line)
-		return (NULL);
-	line[0] = '\0';
-	temp = malloc(sizeof(char) * 1);
-	if (!temp)
-		return (NULL);
-	temp[0] = '\0';
-	printf("stash = %s|", stash);
-	temp = ft_strjoin(temp, stash + pos + 1);//Could go wrong if pos is '\0', keep checking.
-	if (temp == NULL)
-		return (NULL);
-	printf("temp = %s|", temp);
+	line = NULL;
 	stash[pos + 1] = '\0';
 	line = ft_strjoin(line, stash);
 	if (line == NULL)
-		return (free(temp), NULL);
-	stash = ft_strjoin(stash, temp);
-	if (stash == NULL)
 		return (NULL);
-	printf("stash = %s|", stash);
-	free(temp);
 	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
-	char		*line;
+	static char	*stash = NULL;
+	char		*temp = NULL;
+	char		*line = NULL;
+	ssize_t		read_chars;
 
-	if (fd < 0 || BUFFER_SIZE <= 0  || read(fd, line, 0) < 0)
+//	printf("stash begin = %s|", stash);
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, line, 0) < 0)
 		return (NULL);
-	if (stash == NULL)
-	{
-		stash = malloc(sizeof(char) * 1);
-		if (!stash)
-			return (NULL);
-		stash[0] = '\0';
-	}
-	stash = stash_until_newline(fd, stash);
+	stash = stash_until_newline(fd, stash, &read_chars);
+	if (read_chars == 0 && stash[pos_newline(stash)] != '\n')
+		return (free(stash), NULL);
+//	printf("stash = %s|", stash);
 	if (stash == NULL)
 		return (NULL);
+	temp = make_temp(temp, stash);
+	if (temp == NULL)
+		return (free(stash), NULL);
+//	printf("temp = %s|", temp);
 	line = make_line(line, stash);
 	if (line == NULL)
-	{
-		free(stash);
-		free(line);
-		return (NULL);
-	}
-	printf("stash = %s|", stash);
+		return (free(stash), NULL);
+	free(stash);
+	stash = NULL;
+	stash = ft_strjoin(stash, temp);
+	if (stash == NULL)
+		return (free(line), NULL);
+	free(temp);
+//	printf("line = %s|", line);
+//	printf("stash end = %s|", stash);
 	return (line);
 }
-
+/*
 int	main(void)
 {
 	int	fd;
+	char	*line;
 	
 	fd = open("test1.txt", O_RDONLY);
-	printf("line = %s|", get_next_line(fd));
+	line = get_next_line(fd);
+	while (line)
+	{
+		printf("LINE FROM GNL = %s|", line);
+		free(line);
+		line = get_next_line(fd);
+	}
+	printf("%s", line);
+	free(line);
 	close(fd);
 	return (0);
-}
+}*/

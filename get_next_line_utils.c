@@ -1,5 +1,11 @@
 #include	"get_next_line.h"
 
+void	free_mallocs(char *ptr1, char *ptr2)
+{
+	free(ptr1);
+	free(ptr2);
+}
+
 int	has_newline(char *str)
 {
 	size_t	i;
@@ -49,13 +55,4 @@ void	ft_strlcpy(char *dst, const char *src, size_t size)
 		i++;
 	}
 	dst[i] = '\0';
-}
-
-void	ft_strlcat(char *dst, const char *src, size_t size)
-{
-	size_t	dstlen;
-
-	dstlen = ft_strlen(dst);
-	if (size != 0 && dstlen < size)
-		ft_strlcpy(dst + dstlen, src, size - dstlen);
 }
