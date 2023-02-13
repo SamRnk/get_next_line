@@ -45,12 +45,10 @@ void	copy_str(char *dst, char *src, size_t size)
 
 char	*gnl_strjoin(char *dst, char *src)
 {
-	size_t	i;
 	size_t	dst_len;
 	size_t	src_len;
 	char	*new_str;
 
-	i = 0;
 	dst_len = gnl_strlen(dst);
 	src_len = gnl_strlen(src);
 	new_str = malloc(sizeof(char) * (dst_len + src_len + 1));

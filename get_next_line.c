@@ -31,12 +31,10 @@ void	read_and_stack(char **line, int fd, ssize_t *chars_read)
 	}
 }
 
-void	make_line_and_afternwl(char **line, char **after_nwl)
+void	make_line_and_afternwl(char **line, char **after_nwl, size_t pos)
 {
-	size_t	pos;
 	char	*temp;
 
-	pos = pos_newline(*line);
 	*after_nwl = gnl_strjoin(*after_nwl, *line + pos);
 	if (*after_nwl == NULL)
 	{
@@ -62,6 +60,7 @@ void	make_line_and_afternwl(char **line, char **after_nwl)
 char	*get_next_line(int fd)
 {
 	ssize_t		chars_read;
+	size_t		pos;
 	char		*line;
 	static char	*after_nwl;
 
@@ -78,9 +77,10 @@ char	*get_next_line(int fd)
 	read_and_stack(&line, fd, &chars_read);
 	if (line == NULL)
 		return (free(after_nwl), NULL);
-	if (chars_read == 0)
+	pos = pos_newline(line);
+	if (chars_read == 0 || line[pos] == '\0')
 		return (line);
-	make_line_and_afternwl(&line, &after_nwl);
+	make_line_and_afternwl(&line, &after_nwl, pos);
 	return (line);
 }
 /*
