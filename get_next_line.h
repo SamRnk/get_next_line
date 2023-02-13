@@ -23,14 +23,12 @@
 
 char	*get_next_line(int fd);
 
-void	free_mallocs(char *ptr1, char *ptr2);
-
-int		has_newline(char *str);
-
 size_t	pos_newline(char *str);
 
-size_t	ft_strlen(const char *s);
+size_t	gnl_strlen(char *str);
 
-void	ft_strlcpy(char *dst, const char *src, size_t size);
+void	copy_str(char *dst, char *src, size_t size);
+
+char	*gnl_strjoin(char *dst, char *src);
 
 #endif
