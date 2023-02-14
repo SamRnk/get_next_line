@@ -1,5 +1,4 @@
 #include	"get_next_line.h"
-//#include	<stdio.h>
 
 void	afternwl_to_line(char **line, char **after_nwl)
 {
@@ -83,23 +82,3 @@ char	*get_next_line(int fd)
 	make_line_and_afternwl(&line, &after_nwl, pos);
 	return (line);
 }
-/*
-int	main(void)
-{
-	int	fd;
-	size_t	i;
-	char	*str = "!";
-
-	i = 0;
-	fd = open("txt_files/1char.txt", O_RDONLY);
-	while (str != NULL)
-	{
-		str = get_next_line(fd);
-		printf("line from gnl =|%s|\n", str);
-		free(str);
-		i++;
-	}
-	close(fd);
-	printf("Total of printed lines: %lu (inlcuding (null) as a line)\n", i);
-	return (0);
-}*/
