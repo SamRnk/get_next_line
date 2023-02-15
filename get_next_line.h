@@ -15,11 +15,21 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include <fcntl.h>
+# include <limits.h>
 
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 42
-#endif
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
+
+# if BUFFER_SIZE < 0
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE 0
+# endif
+
+# if BUFFER_SIZE >= INT_MAX
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE 100000
+# endif
 
 char	*get_next_line(int fd);
 

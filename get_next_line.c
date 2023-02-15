@@ -12,6 +12,7 @@
 
 #include	"get_next_line.h"
 //#include	<stdio.h>
+//#include	<fcntl.h>
 
 void	afternwl_to_line(char **line, char **after_nwl)
 {
@@ -75,7 +76,7 @@ char	*get_next_line(int fd)
 	char		*line;
 	static char	*after_nwl;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE == 0)
 		return (NULL);
 	line = NULL;
 	chars_read = 1;

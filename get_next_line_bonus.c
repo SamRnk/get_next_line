@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include	"get_next_line_bonus.h"
-//#include	<stdio.h>
 
 void	afternwl_to_line(char **line, char **after_nwl)
 {
@@ -73,9 +72,9 @@ char	*get_next_line(int fd)
 	ssize_t		chars_read;
 	size_t		pos;
 	char		*line;
-	static char	*after_nwl[FOPEN_MAX];
+	static char	*after_nwl[OPEN_MAX];
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || fd > FOPEN_MAX)
+	if (fd < 0 || BUFFER_SIZE == 0 || fd > OPEN_MAX)
 		return (NULL);
 	line = NULL;
 	chars_read = 1;
@@ -94,31 +93,3 @@ char	*get_next_line(int fd)
 	make_line_and_afternwl(&line, &after_nwl[fd], pos);
 	return (line);
 }
-/*
-int	main(void)
-{
-	int	fd[2];
-	size_t	i;
-	size_t	j;
-	char	*str = "!";
-
-	i = 0;
-	j = 1;
-	fd[1] = open("txt_files/test1.txt", O_RDONLY);
-	fd[2] = open("txt_files/justnwl.txt", O_RDONLY);
-	while (str != NULL)
-	{
-		str = get_next_line(fd[j]);
-		printf("line from gnl =|%s|\n", str);
-		free(str);
-		i++;
-		if (j == 1)
-			j++;
-		else
-			j--;
-	}
-	close(fd[1]);
-	close(fd[2]);
-	printf("Total of printed lines: %lu (inlcuding (null) as a line)\n", i);
-	return (0);
-}*/
