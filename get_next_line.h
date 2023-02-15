@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   get_next_line.h                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: sreerink <marvin@codam.nl>                   +#+                     */
+/*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/12/20 17:26:07 by sreerink      #+#    #+#                 */
-/*   Updated: 2023/01/09 18:32:17 by sreerink      ########   odam.nl         */
+/*   Created: 2023/02/15 03:38:59 by sreerink      #+#    #+#                 */
+/*   Updated: 2023/02/15 03:39:04 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
