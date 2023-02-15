@@ -1,4 +1,5 @@
 #include	"get_next_line.h"
+//#include	<stdio.h>
 
 void	afternwl_to_line(char **line, char **after_nwl)
 {
@@ -47,13 +48,12 @@ void	make_line_and_afternwl(char **line, char **after_nwl, size_t pos)
 		free(*line);
 		free(*after_nwl);
 		*line = NULL;
+		*after_nwl = NULL;
 		return ;
 	}
 	copy_str(temp, *line, pos);
 	free(*line);
-	*line = NULL;
-	*line = gnl_strjoin(*line, temp);
-	free(temp);
+	*line = temp;
 }
 
 char	*get_next_line(int fd)
@@ -82,3 +82,22 @@ char	*get_next_line(int fd)
 	make_line_and_afternwl(&line, &after_nwl, pos);
 	return (line);
 }
+/*
+int	main(void)
+{
+	int	fd;
+	size_t	i;
+	char	*str = "!";
+	i = 0;
+	fd = open("txt_files/justoneline.txt", O_RDONLY);
+	while (str != NULL)
+	{
+		str = get_next_line(fd);
+		printf("line from gnl =|%s|\n", str);
+		free(str);
+		i++;
+	}
+	close(fd);
+	printf("Total of printed lines: %lu (inlcuding (null) as a line)\n", i);
+	return (0);
+}*/

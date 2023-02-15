@@ -1,5 +1,5 @@
 #include	"get_next_line_bonus.h"
-#include	<stdio.h>
+//#include	<stdio.h>
 
 void	afternwl_to_line(char **line, char **after_nwl)
 {
@@ -48,13 +48,12 @@ void	make_line_and_afternwl(char **line, char **after_nwl, size_t pos)
 		free(*line);
 		free(*after_nwl);
 		*line = NULL;
+		*after_nwl = NULL;
 		return ;
 	}
 	copy_str(temp, *line, pos);
 	free(*line);
-	*line = NULL;
-	*line = gnl_strjoin(*line, temp);
-	free(temp);
+	*line = temp;
 }
 
 char	*get_next_line(int fd)
@@ -62,9 +61,9 @@ char	*get_next_line(int fd)
 	ssize_t		chars_read;
 	size_t		pos;
 	char		*line;
-	static char	after_nwl[fd];
+	static char	*after_nwl[FOPEN_MAX];
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > FOPEN_MAX)
 		return (NULL);
 	line = NULL;
 	chars_read = 1;
@@ -76,29 +75,38 @@ char	*get_next_line(int fd)
 	}
 	read_and_stack(&line, fd, &chars_read);
 	if (line == NULL)
-		return (free(after_nwl), NULL);
+		return (free(after_nwl[fd]), NULL);
 	pos = pos_newline(line);
 	if (chars_read == 0 || line[pos] == '\0')
 		return (line);
 	make_line_and_afternwl(&line, &after_nwl[fd], pos);
 	return (line);
 }
-
+/*
 int	main(void)
 {
-	int	fd;
+	int	fd[2];
 	size_t	i;
+	size_t	j;
 	char	*str = "!";
+
 	i = 0;
-	fd = open("txt_files/bible.txt", O_RDONLY);
+	j = 1;
+	fd[1] = open("txt_files/test1.txt", O_RDONLY);
+	fd[2] = open("txt_files/justnwl.txt", O_RDONLY);
 	while (str != NULL)
 	{
-		str = get_next_line(fd);
+		str = get_next_line(fd[j]);
 		printf("line from gnl =|%s|\n", str);
 		free(str);
 		i++;
+		if (j == 1)
+			j++;
+		else
+			j--;
 	}
-	close(fd);
+	close(fd[1]);
+	close(fd[2]);
 	printf("Total of printed lines: %lu (inlcuding (null) as a line)\n", i);
 	return (0);
-}
+}*/
