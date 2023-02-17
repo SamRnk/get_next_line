@@ -28,7 +28,7 @@
 
 # if BUFFER_SIZE >= INT_MAX
 #  undef BUFFER_SIZE
-#  define BUFFER_SIZE 100000
+#  define BUFFER_SIZE 0
 # endif
 
 char	*get_next_line(int fd);
